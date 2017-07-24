@@ -1,8 +1,10 @@
 # Python_MS5837
 
-A python module to interface with MS5837-30BA and MS5837-02BA waterproof pressure and temperature sensors. Tested on Raspberry Pi 3 with Raspbian.
+A python module to interface with MS5837-30BA and MS5837-02BA waterproof pressure and temperature sensors.
 This module is based on RTIMU MS5837 as well as bluerobotics MS5837.
-The main difference to bluerobotics implementation is that the read command will release as soon as it is called and return True new valid data is available.
+The main difference to bluerobotics implementation is that the read command will release as soon as it is called and return True when new valid data is available.
+
+This code is untested yet.
 
 The Adafruit_Python_GPIO must be installed.
 
