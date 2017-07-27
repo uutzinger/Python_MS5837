@@ -82,11 +82,11 @@ while True:
 
       # Update ROS data
       if not rospy.is_shutdown():
-		depthData = fluidPressure()
+        depthData = fluidPressure()
         depthData.header.stamp = rospy.Time.now()
-		depthData.header.frame_id = 'rear'
-		depthData.fluid_pressure = sensor.pressure(MS5837.UNITS_Pa)
-		depthData.variance = 0
+        depthData.header.frame_id = 'rear'
+        depthData.fluid_pressure = sensor.pressure(MS5837.UNITS_Pa)
+        depthData.variance = 0
         pubDepth.publish(depthData)
     
   # Compute Sampling Rate

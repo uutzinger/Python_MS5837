@@ -93,7 +93,7 @@ class MS5837(object):
     self._model = model
     self._D1 = 0
     self._D2 = 0
-        self._oversampling = OSR_8192
+    self._oversampling = OSR_8192
     self._conversionTime = (2.5e-6 * 2**(8+OSR_8192))
     
     # Create I2C device.
@@ -117,8 +117,8 @@ class MS5837(object):
     self._CRC = (self._calData[0] & 0xF000) >> 12 
     self._CRCCalculated = self.crc4(self._calData)
     
-    if (self._CRCCalculated != self._CRC )
-      print "PROM read error, CRC failed!"
+    if (self._CRCCalculated != self._CRC ):
+      print("PROM read error, CRC failed!")
       return False
       
     self._C1 = self._calData[1]   # INT16
@@ -143,7 +143,7 @@ class MS5837(object):
 
   def setOSR(self, oversampling = OSR_8192):
     if oversampling < OSR_256 or oversampling > OSR_8192:
-      print "Invalid oversampling option!"
+      print("Invalid oversampling option!")
       return False
     self._oversampling = oversampling
     # Maximum conversion time increases linearly with oversampling
@@ -155,7 +155,7 @@ class MS5837(object):
   def getPollInterval(self):
     return (self._conversionTime/3)
 
-  def read(self)
+  def read(self):
     self._validReadings = False
     
     # IDLE
@@ -164,12 +164,11 @@ class MS5837(object):
       self._device.writeRaw8(MS5837_CMD_CONV_D1_256 + 2*self._oversampling )
       self.state = MS5837_STATE_PRESSURE;
       self._timer = time.monotonic()
-      break
 
     # PRESSURE
     elif self._state == MS5837_STATE_PRESSURE:
       
-      if (time.monotonic() - self._timer) < self._conversionTime)
+      if ((time.monotonic() - self._timer) < self._conversionTime):
         return False                    # not time yet
       d = self._device.readList(MS5837_CMD_ADC, 3)
       self._D1 = ((d[0] << 16) | (d[1] << 8) | d[2])
@@ -184,7 +183,7 @@ class MS5837(object):
     elif self._state == MS5837_STATE_TEMPERATURE:
     
       # read temperature
-      if ((time.monotonic() - self._timer) < self._conversionTime)
+      if ((time.monotonic() - self._timer) < self._conversionTime):
         return False # not time yet
       d = self._device.readList(MS5837_CMD_ADC,3)
       self._D2 = ((d[0] << 16) | (d[1] << 8) | d[2])
@@ -214,16 +213,16 @@ class MS5837(object):
           offset2 = (31*(self._temperature-2000)*(self._temperature-2000))/8
           sens2 = (63*(self._temperature-2000)*(self._temperature-2000))/32
       else:
-        if (self._temperature < 2000) 
+        if (self._temperature < 2000): 
           # low temp
           T2 = (3 * (dT * dT))/(8589934592);
           offset2 = (3 * ((self._temperature - 2000) * (self._temperature - 2000))) /2
           sens2 = (5 * ((self._temperature - 2000) * (self._temperature - 2000))) /8
-          if (self._temperature < -1500) 
+          if (self._temperature < -1500): 
             # very low temp
             offset2 = offset2 + 7 * (self._temperature + 1500) * (self._temperature + 1500)
             sens2 = sens2 + 4 * (self._temperature + 1500) * (self._temperature + 1500)
-        else 
+        else:
           # high temp
           T2 = 2*(dT*dT)/(137438953472)
           offset2 = (self._temperature - 2000) * (self._temperature - 2000) / 16
@@ -233,7 +232,7 @@ class MS5837(object):
       sens = sens-sens2
       self._temperature = self._temperature - T2
       
-      if self._model == MODEL_02BA):
+      if (self._model == MODEL_02BA):
         self._pressure = ((((self._D1*sens)/2097152)-offset)/32768)/100.0
       else:
         self._pressure = ((((self._D1*sens)/2097152)-offset)/8192)/10.0 # mbar
@@ -243,11 +242,10 @@ class MS5837(object):
     
       self._validReadings = True
       self._state = MS5837_STATE_IDLE
-      break
     
     if self._validReadings == True:
       return True
-    else 
+    else: 
       return False
     
   def crc4(self, n_prom):
@@ -259,7 +257,7 @@ class MS5837(object):
       if cnt%2 == 1 :
         n_rem ^= ((n_prom[cnt>>1]) & 0X00FF)
       else:
-      n_rem ^= (n_prom[cnt>>1] >> 8)
+        n_rem ^= (n_prom[cnt>>1] >> 8)
         
       for n_bit in range(8,1, -1):
         if n_rem & 0x8000:
