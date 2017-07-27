@@ -18,8 +18,8 @@ MS5837 provides a generic MS5837 class for use with different models
 
 An MS5837 object can be constructed by specifiying the model and the bus
 
-	sensor = ms5837.MS5837() # Use defaults (MS5837-30BA device on I2C bus 1)
-	sensor = ms5837.MS5837(ms5837.MODEL_02BA, 0) # Specify MS5837-02BA device on I2C bus 0
+	sensor = MS5837.MS5837() # Use defaults (MS5837-30BA device on I2C bus 1)
+	sensor = MS5837.MS5837(ms5837.MODEL_02BA, 0) # Specify MS5837-02BA device on I2C bus 0
 
 ### init()
 
@@ -46,7 +46,7 @@ After initilization, set the sensor accuracty
 
 ### getPollInterval()
 
-After setting oversampling rate the recommended poll interval can be obtained
+After setting oversampling rate the recommended poll interval can be obtained:
 	
 	poll_interval = sensor.getPollInterval()
 
@@ -58,7 +58,7 @@ Read the sensor and update the pressure and temperature. The sensor will be read
 
     sensor.read()
        
-Returns True if read was successful, False otherwise.
+Returns True if a new data set is available, False otherwise. A data set consists of a pressure and tempreature reading.
 
 ### setFluidDensity(density)
 
@@ -112,15 +112,14 @@ Returns the most recent temperature in the requested units, or temperature in de
 
 Get the most recent depth measurement in meters.
 
-	sensor.depth()
-
+	sensor.depth(staticPressure=1013.25)
+	
 Returns the most recent depth in meters using the fluid density (kg/m^3) configured by setFluidDensity(). Call read() to update.
 
 ### altitude()
 
 Get the most recent altitude measurement relative to Mean Sea Level pressure in meters.
 
-	sensor.altitude()
+	sensor.altitude(staticPressure=1013.25)
 
 Returns the most recent altitude in meters relative to MSL pressure using the density of air at MSL. Call read() to update.
-
